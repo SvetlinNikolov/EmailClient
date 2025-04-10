@@ -2,8 +2,12 @@
     ViewData["Title"] = "Welcome";
 }
 
-<h2>Welcome to the Email Client</h2>
+<link rel="stylesheet" href="~/css/home.css" />
 
-<p>If you want to log in, click the button below.</p>
-
-<a href="@Url.Action("Login", "Login")" class="btn btn-primary">Login</a>
+<div class="home-container">
+    <div class="welcome-card">
+        <h2>Welcome to the Email Client</h2>
+        <p>If you want to log in, click the button below.</p>
+        <a href="@Url.Action("Login", "Login")" class="login-btn">Login</a>
+    </div>
+</div>
