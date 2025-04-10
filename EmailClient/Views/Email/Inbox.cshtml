@@ -1,0 +1,56 @@
+﻿@model EmailClient.ViewModels.Email.InboxViewModel
+
+@{
+    ViewData["Title"] = "Inbox";
+}
+
+<h2 style="margin-bottom: 1rem;">Inbox</h2>
+
+<form method="get" asp-action="GetInbox" style="margin-bottom: 1rem;">
+    <input type="hidden" name="page" value="@Model.CurrentPage" />
+    <button type="submit">Refresh</button>
+</form>
+
+@if (Model.Emails == null || !Model.Emails.Any())
+{
+    <p>No emails to display.</p>
+}
+else
+{
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+        <thead>
+            <tr style="background-color: #f0f0f0;">
+                <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ccc;">From</th>
+                <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ccc;">Subject</th>
+                <th style="text-align: left; padding: 8px; border-bottom: 1px solid #ccc;">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var email in Model.Emails)
+            {
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">@email.From</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">@email.Subject</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">@email.Date</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.TotalPages > 1)
+{
+    <div style="margin-top: 1rem;">
+        @if (Model.CurrentPage > 1)
+        {
+            <a href="?page=@(Model.CurrentPage - 1)" style="margin-right: 10px;">Previous</a>
+        }
+
+        <span>Page @Model.CurrentPage of @Model.TotalPages</span>
+
+        @if (Model.CurrentPage < Model.TotalPages)
+        {
+            <a href="?page=@(Model.CurrentPage + 1)" style="margin-left: 10px;">Next</a>
+        }
+    </div>
+}

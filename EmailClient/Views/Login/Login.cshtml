@@ -1,0 +1,99 @@
+﻿@using EmailClient.ViewModels.Login;
+
+@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Client Login";
+}
+
+<h2>Login</h2>
+
+<form method="post" asp-controller="Login" asp-action="Login">
+    <input type="hidden" name="ImapLogin" />
+    <input type="hidden" name="SmtpLogin" />
+
+    <fieldset>
+        <legend>Incoming Mail (IMAP)</legend>
+        <div>
+            <label>Server</label>
+            <input asp-for="ImapLogin.ImapServer" name="ImapLogin.ImapServer" required />
+        </div>
+        <div>
+            <label>Port</label>
+            <input asp-for="ImapLogin.ImapPort" name="ImapLogin.ImapPort" type="number" value="993" required />
+        </div>
+        <div>
+            <label>Username</label>
+            <input asp-for="ImapLogin.ImapUsername" name="ImapLogin.ImapUsername" id="ImapUsername" required />
+        </div>
+        <div>
+            <label>Password</label>
+            <input asp-for="ImapLogin.ImapPassword" name="ImapLogin.ImapPassword" id="ImapPassword" type="password" required />
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Outgoing Mail (SMTP)</legend>
+
+        <div>
+            <input type="checkbox" id="UseSeparateSmtpCreds" onchange="toggleSmtpCreds()" />
+            <label for="UseSeparateSmtpCreds">Use different credentials for SMTP</label>
+        </div>
+
+        <div>
+            <label>Server</label>
+            <input asp-for="SmtpLogin.SmtpServer" name="SmtpLogin.SmtpServer" required />
+        </div>
+        <div>
+            <label>Port</label>
+            <input asp-for="SmtpLogin.SmtpPort" name="SmtpLogin.SmtpPort" type="number" value="465" required />
+        </div>
+        <div>
+            <label>Username</label>
+            <input asp-for="SmtpLogin.SmtpUsername" name="SmtpLogin.SmtpUsername" id="SmtpUsername" required disabled />
+        </div>
+        <div>
+            <label>Password</label>
+            <input asp-for="SmtpLogin.SmtpPassword" name="SmtpLogin.SmtpPassword" id="SmtpPassword" type="password" required disabled />
+        </div>
+    </fieldset>
+
+    <button type="submit">Login</button>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+</form>
+
+@section Scripts {
+    <script>
+        function toggleSmtpCreds() {
+            const isSeparate = document.getElementById("UseSeparateSmtpCreds").checked;
+            const smtpUser = document.getElementById("SmtpUsername");
+            const smtpPass = document.getElementById("SmtpPassword");
+            const imapUser = document.getElementById("ImapUsername");
+            const imapPass = document.getElementById("ImapPassword");
+
+            smtpUser.disabled = !isSeparate;
+            smtpPass.disabled = !isSeparate;
+
+            if (!isSeparate) {
+                smtpUser.value = imapUser.value;
+                smtpPass.value = imapPass.value;
+            }
+        }
+
+        window.onload = () => {
+            const smtpUser = document.getElementById("SmtpUsername");
+            const smtpPass = document.getElementById("SmtpPassword");
+            const imapUser = document.getElementById("ImapUsername");
+            const imapPass = document.getElementById("ImapPassword");
+
+            if (!document.getElementById("UseSeparateSmtpCreds").checked) {
+                smtpUser.value = imapUser.value;
+                smtpPass.value = imapPass.value;
+            }
+        };
+    </script>
+}
