@@ -11,38 +11,36 @@
     <h2>Login</h2>
 
     <form method="post" asp-controller="Login" asp-action="Login">
-        <input type="hidden" name="ImapLogin" />
-        <input type="hidden" name="SmtpLogin" />
-
         <fieldset>
             <legend>Incoming Mail (IMAP)</legend>
+
             <label>Server</label>
-            <input asp-for="ImapLogin.ImapServer" required />
+            <input asp-for="ImapLogin.ImapServer" name="ImapLogin.ImapServer" required />
 
             <label>Port</label>
-            <input asp-for="ImapLogin.ImapPort" type="number" value="993" required />
+            <input asp-for="ImapLogin.ImapPort" name="ImapLogin.ImapPort" type="number" value="993" required />
 
             <label>Username</label>
-            <input asp-for="ImapLogin.ImapUsername" required />
+            <input asp-for="ImapLogin.ImapUsername" name="ImapLogin.ImapUsername" required />
 
             <label>Password</label>
-            <input asp-for="ImapLogin.ImapPassword" type="password" required />
+            <input asp-for="ImapLogin.ImapPassword" name="ImapLogin.ImapPassword" type="password" required />
         </fieldset>
 
         <fieldset>
             <legend>Outgoing Mail (SMTP)</legend>
 
             <label>Server</label>
-            <input asp-for="SmtpLogin.SmtpServer" required />
+            <input asp-for="SmtpLogin.SmtpServer" name="SmtpLogin.SmtpServer" required />
 
             <label>Port</label>
-            <input asp-for="SmtpLogin.SmtpPort" type="number" value="465" required />
+            <input asp-for="SmtpLogin.SmtpPort" name="SmtpLogin.SmtpPort" type="number" value="465" required />
 
             <label>Username</label>
-            <input asp-for="SmtpLogin.SmtpUsername" required />
+            <input asp-for="SmtpLogin.SmtpUsername" name="SmtpLogin.SmtpUsername" required />
 
             <label>Password</label>
-            <input asp-for="SmtpLogin.SmtpPassword" type="password" required />
+            <input asp-for="SmtpLogin.SmtpPassword" name="SmtpLogin.SmtpPassword" type="password" required />
         </fieldset>
 
         <button type="submit">Login</button>
