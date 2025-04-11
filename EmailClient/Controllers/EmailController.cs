@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 public class EmailController(IInboxService inboxService) : Controller
 {
     [HttpGet("Inbox")]
-    public async Task<IActionResult> GetInbox(int page = 1)
+    public async Task<IActionResult> GetInbox(int page = 1, bool refresh = false)
     {
-        var inboxResult = await inboxService.GetInboxAsync(HttpContext.Session.Id, page, 10); // this in constant TODO
+        var inboxResult = await inboxService.GetInboxAsync(HttpContext.Session.Id, page, 10, refresh); // this in constant TODO
         if (!inboxResult.IsSuccess)
         {
             return View("Error", inboxResult.Error!.Message);

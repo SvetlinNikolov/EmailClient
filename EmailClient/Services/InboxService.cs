@@ -4,6 +4,7 @@ using EmailClient.Auth;
 using EmailClient.Domain.Cache;
 using EmailClient.Domain.Results;
 using EmailClient.Factories.Contracts;
+using EmailClient.Helpers;
 using EmailClient.Services.Contracts;
 using EmailClient.ViewModels.Email;
 
@@ -12,12 +13,15 @@ public class InboxService(
     ICacheService cache,
     ICookieAuthService cookieAuthService) : IInboxService
 {
-    public async Task<Result> GetInboxAsync(string sessionId, int page, int pageSize)
+    public async Task<Result> GetInboxAsync(string sessionId, int page, int pageSize, bool refresh)
     {
         var cacheKey = CacheConfig.GetInboxCacheKey(sessionId);
-        if (cache.TryGet(cacheKey, out InboxViewModel cached) && cached.CurrentPage == page)
+        if (!refresh)
         {
-            return Result.Success(cached);
+            if (cache.TryGet(cacheKey, out InboxViewModel cached))
+            {
+                return Result.Success(cached);
+            }
         }
 
         var loginCookieResult = cookieAuthService.GetLoginCookie();
@@ -39,6 +43,7 @@ public class InboxService(
         if (!headersResult.IsSuccess) return headersResult;
 
         var inboxVm = headersResult.GetData<InboxViewModel>();
+        inboxVm.Emails!.FormatAndTrimEmailData();
 
         cache.Set(cacheKey, inboxVm, CacheConfig.InboxTtl);
 

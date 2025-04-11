@@ -2,7 +2,7 @@
 
 public class InboxViewModel
 {
-    public List<EmailHeader> Emails { get; set; } = new();
+    public IEnumerable<EmailHeader>? Emails { get; set; }
 
     public int CurrentPage { get; set; }
 

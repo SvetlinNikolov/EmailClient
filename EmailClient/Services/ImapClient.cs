@@ -92,8 +92,7 @@ public class ImapClient(string host, int port, string username, string password)
 
         var pageIds = allIds
             .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
+            .Take(pageSize);
 
         if (!pageIds.Any())
             return Result.Success(new InboxViewModel
@@ -106,9 +105,13 @@ public class ImapClient(string host, int port, string username, string password)
         var emailsResult = await FetchHeadersByIdsAsync(pageIds);
         if (!emailsResult.IsSuccess) return emailsResult;
 
+        var emails = emailsResult.GetData<List<EmailHeader>>()
+            .OrderByDescending(x => x.Date)
+            .ToList();
+
         var inboxVm = new InboxViewModel
         {
-            Emails = emailsResult.GetData<List<EmailHeader>>(),
+            Emails = emails,
             CurrentPage = page,
             TotalPages = totalPages
         };
@@ -149,7 +152,7 @@ public class ImapClient(string host, int port, string username, string password)
         return Result.Success(ids);
     }
 
-    private async Task<Result> FetchHeadersByIdsAsync(List<int> ids)
+    private async Task<Result> FetchHeadersByIdsAsync(IEnumerable<int> ids)
     {
         var tag = NextTag();
         var idString = string.Join(",", ids);

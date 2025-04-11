@@ -1,0 +1,73 @@
+﻿.inbox-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #e3f2fd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+    .inbox-container h2 {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #1976d2;
+    }
+
+.refresh-form {
+    text-align: right;
+    margin-bottom: 1rem;
+}
+
+    .refresh-form button {
+        padding: 0.4rem 1rem;
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .refresh-form button:hover {
+            background-color: #1565c0;
+        }
+
+.email-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+    .email-table th,
+    .email-table td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .email-table th {
+        background-color: #bbdefb;
+        color: #0d47a1;
+    }
+
+.pagination {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+    .pagination a {
+        margin: 0 10px;
+        text-decoration: none;
+        color: #1976d2;
+        font-weight: bold;
+    }
+
+        .pagination a:hover {
+            text-decoration: underline;
+        }
+
+.no-emails {
+    text-align: center;
+    font-style: italic;
+    color: #555;
+}
