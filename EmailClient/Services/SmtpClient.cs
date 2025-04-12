@@ -5,6 +5,7 @@ using EmailClient.Domain.Results;
 using EmailClient.Services.Contracts;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Text;
@@ -64,7 +65,7 @@ public class SmtpClient(string smtpServer, int port, string username, string pas
 
         return await All(
             () => ReadResponse(reader),
-            () => Step("EHLO localhost", read: false),
+            () => Step($"EHLO {Dns.GetHostName()}", read: false),
             () => ReadMultiLineResponse(reader),
             () => Step("AUTH LOGIN"),
             () => Step(Convert.ToBase64String(Encoding.ASCII.GetBytes(_username))),
