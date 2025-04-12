@@ -1,6 +1,7 @@
 ﻿namespace EmailClient.Helpers;
 
 using EmailClient.ViewModels.Email;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 public static class InboxExtensions
@@ -16,19 +17,28 @@ public static class InboxExtensions
 
     public static string DecodeAndTrimSubject(this string? rawSubject)
     {
-        return rawSubject; //TODO implement
+        return MimeHeaderHelper.DecodeMimeHeader(rawSubject);
     }
+
     public static string FormatDate(this string? rawDate)
     {
         if (string.IsNullOrWhiteSpace(rawDate))
             return "(Unknown Date)";
 
-        if (DateTime.TryParse(rawDate, out var dt))
+        try
         {
-            return dt.ToString("dd MMM yyyy, HH:mm");
-        }
+            var cleaned = rawDate.Split('(')[0].Trim();
+            var localTime = DateTimeOffset
+                .Parse(cleaned, CultureInfo.InvariantCulture)
+                .ToLocalTime()
+                .DateTime;
 
-        return rawDate;
+            return localTime.ToString("g", CultureInfo.CurrentCulture); 
+        }
+        catch
+        {
+            return rawDate.Trim();
+        }
     }
 
     public static IEnumerable<EmailHeader> FormatAndTrimEmailData(this IEnumerable<EmailHeader> headers)
@@ -38,8 +48,31 @@ public static class InboxExtensions
             return Enumerable.Empty<EmailHeader>();
         }
 
-        return headers.Select(h => new EmailHeader(h.Subject.DecodeAndTrimSubject(), h.From.ExtractEmail(), h.Date.FormatDate()))
-                                  .OrderByDescending(x => x.Date)
-                                  .ToList();
+        return headers
+                   .OrderByDescending(h => TryParseRawDate(h.Date))
+                   .Select(h => new EmailHeader(
+                       h.Subject.DecodeAndTrimSubject(),
+                       h.From.ExtractEmail(),
+                       h.Date.FormatDate()))
+                   .ToList();
+    }
+
+    private static DateTime TryParseRawDate(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw))
+            return DateTime.MinValue;
+
+        try
+        {
+            var cleaned = raw.Split('(')[0].Trim();
+            return DateTimeOffset
+                .Parse(cleaned, CultureInfo.InvariantCulture)
+                .ToLocalTime()
+                .DateTime;
+        }
+        catch
+        {
+            return DateTime.MinValue;
+        }
     }
 }
