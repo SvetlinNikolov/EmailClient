@@ -30,6 +30,7 @@ public static class InboxExtensions
 
         return rawDate;
     }
+
     public static IEnumerable<EmailHeader> FormatAndTrimEmailData(this IEnumerable<EmailHeader> headers)
     {
         if (headers == null || !headers.Any())
@@ -37,10 +38,8 @@ public static class InboxExtensions
             return Enumerable.Empty<EmailHeader>();
         }
 
-        return headers.Select(h => new EmailHeader(
-            h.From.ExtractEmail(),
-            h.Subject.DecodeAndTrimSubject(),
-            h.Date.FormatDate()
-        )).ToList();
+        return headers.Select(h => new EmailHeader(h.Subject.DecodeAndTrimSubject(), h.From.ExtractEmail(), h.Date.FormatDate()))
+                                  .OrderByDescending(x => x.Date)
+                                  .ToList();
     }
 }

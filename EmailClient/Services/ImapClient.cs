@@ -99,35 +99,37 @@ public class ImapClient(string host, int port, string username, string password)
         if (!searchResult.IsSuccess) return searchResult;
 
         var allIds = searchResult.GetData<List<int>>();
-        var totalPages = (int)Math.Ceiling((double)allIds.Count / pageSize);
-
-        var pageIds = allIds
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize);
-
-        if (!pageIds.Any())
+        if (allIds.Count == 0)
+        {
             return Result.Success(new InboxViewModel
             {
                 Emails = [],
-                CurrentPage = page,
-                TotalPages = totalPages
+                CurrentPage = 1,
+                TotalPages = 1
             });
+        }
+
+        var pageIds = allIds
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        if (pageIds == null || !pageIds.Any())
+        {
+            return Result.Failure(ImapErrors.ImapListMailboxesFailed());
+        }
 
         var emailsResult = await FetchHeadersByIdsAsync(pageIds);
         if (!emailsResult.IsSuccess) return emailsResult;
 
-        var emails = emailsResult.GetData<List<EmailHeader>>()
-            .OrderByDescending(x => x.Date)
-            .ToList();
+        var emails = emailsResult.GetData<IEnumerable<EmailHeader>>();
 
-        var inboxVm = new InboxViewModel
+        return Result.Success(new InboxViewModel
         {
-            Emails = emails.FormatAndTrimEmailData(),
+            Emails = emails,
             CurrentPage = page,
-            TotalPages = totalPages
-        };
-
-        return Result.Success(inboxVm);
+            TotalPages = (int)Math.Ceiling((double)allIds.Count / pageSize)
+        });
     }
 
     public bool IsConnected()
@@ -199,8 +201,7 @@ public class ImapClient(string host, int port, string username, string password)
                 buffer.Clear();
             }
         }
-
-        return Result.Success(headers);
+        return Result.Success(headers.FormatAndTrimEmailData());
     }
 
 
