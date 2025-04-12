@@ -37,7 +37,7 @@ public class InboxService(
         //var paged = paginationService.Paginate(inboxVm.Emails!, page, perPage);
         return Result.Success(new InboxViewModel
         {
-            Emails = paged,
+            Emails = inboxVm.Emails,
             CurrentPage = page,
             TotalPages = inboxVm.TotalPages
         });

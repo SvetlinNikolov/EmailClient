@@ -13,6 +13,76 @@
         color: #1976d2;
     }
 
+/* Compose button */
+#toggleComposeBtn {
+    padding: 0.4rem 1rem;
+    margin-bottom: 1rem;
+    background-color: #64b5f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+}
+
+/* Compose form container */
+#composeFormContainer {
+    margin-bottom: 1.5rem;
+}
+
+/* Compose form */
+.compose-form {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.2s ease-in;
+}
+
+    .compose-form input,
+    .compose-form textarea {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 0.75rem;
+        border: 1px solid #bbb;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-family: inherit;
+    }
+
+    .compose-form button {
+        padding: 0.4rem 1rem;
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .compose-form button:hover {
+            background-color: #1565c0;
+        }
+
+.send-status {
+    margin-top: 0.5rem;
+    font-style: italic;
+    color: #333;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .refresh-form {
     text-align: right;
     margin-bottom: 1rem;

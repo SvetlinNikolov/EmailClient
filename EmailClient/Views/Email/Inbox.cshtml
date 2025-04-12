@@ -9,6 +9,9 @@
 <div class="inbox-container">
     <h2>Inbox</h2>
 
+    <button id="toggleComposeBtn" type="button">Compose</button>
+    <div id="composeFormContainer" class="compose-container"></div>
+
     <form method="get" asp-action="GetInbox" class="refresh-form">
         <input type="hidden" name="page" value="@Model.CurrentPage" />
         <input type="hidden" name="refresh" value="true" />
@@ -59,3 +62,5 @@
         </div>
     }
 </div>
+
+<script src="~/js/sendEmail.js"></script>
