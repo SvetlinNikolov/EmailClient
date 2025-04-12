@@ -32,7 +32,7 @@ public class CookieAuthService : ICookieAuthService
                 SameSite = SameSiteMode.Strict
             });
 
-            return Result.Success();
+            return Result.Success(payload);
         }
         catch
         {

@@ -31,7 +31,8 @@ namespace EmailClient
             builder.Services.AddScoped<IInboxService, InboxService>();
             builder.Services.AddSingleton<IPaginationService, PaginationService>();
             builder.Services.AddSingleton<IEmailSenderService, EmailSenderService>();
-
+            builder.Services.AddSingleton<IIMapSessionService, IMapSessionService>();
+            
             var app = builder.Build();
             app.Urls.Add("http://+:8080");
 

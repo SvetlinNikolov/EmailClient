@@ -2,29 +2,30 @@
 
 using EmailClient.Auth;
 using EmailClient.Domain.Results;
-using EmailClient.Factories.Contracts;
 using EmailClient.Services.Contracts;
 using EmailClient.ViewModels.Login;
 
 public class LoginService(
-    IImapClientFactory imapClientFactory,
-    ICookieAuthService cookieAuthService) : ILoginService
+    ICookieAuthService cookieAuthService,
+    IHttpContextAccessor httpContextAccessor,
+    IIMapSessionService imapSessionService) : ILoginService
 {
     public async Task<Result> LoginAsync(LoginViewModel loginViewModel)
     {
-        var client = imapClientFactory.Create(
-            loginViewModel.ImapLogin.ImapServer,
-            loginViewModel.ImapLogin.ImapPort,
-            loginViewModel.ImapLogin.ImapUsername,
-            loginViewModel.ImapLogin.ImapPassword
-        );
+        var cookieResult = cookieAuthService.SaveLoginCookie(MapLoginVmToLoginCookie(loginViewModel));
+        if (!cookieResult.IsSuccess)
+        {
+            return cookieResult;
+        }
 
-        var connectAndLogin = await client.ConnectAndLoginAsync();
-        if (!connectAndLogin.IsSuccess) return connectAndLogin;
+        var sessionId = httpContextAccessor.HttpContext!.Session.Id;
+        var sessionResult = await imapSessionService.GetOrCreateAsync(sessionId, cookieResult.GetData<LoginCookie>());
+        if (!sessionResult.IsSuccess)
+        {
+            return sessionResult;
+        }
 
-        var cookie = MapLoginVmToLoginCookie(loginViewModel);
-
-        return cookieAuthService.SaveLoginCookie(cookie);
+        return Result.Success();
     }
 
     private static LoginCookie MapLoginVmToLoginCookie(LoginViewModel loginViewModel)

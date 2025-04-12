@@ -130,6 +130,10 @@ public class ImapClient(string host, int port, string username, string password)
         return Result.Success(inboxVm);
     }
 
+    public bool IsConnected()
+    {
+        return _tcpClient?.Connected == true;
+    }
 
     private async Task<Result> SelectInboxAsync()
     {

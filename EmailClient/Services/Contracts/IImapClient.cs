@@ -9,4 +9,5 @@ public interface IImapClient : IDisposable
     Task<Result> ConnectAndLoginAsync();
     Task<Result> LogoutAsync();
     Task<Result> GetInboxAsync(int page, int pageSize);
+    bool IsConnected();
 }
