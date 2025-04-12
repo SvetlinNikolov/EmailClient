@@ -11,42 +11,36 @@ using EmailClient.ViewModels.Email;
 public class InboxService(
     IImapClientFactory clientFactory,
     ICacheService cache,
-    ICookieAuthService cookieAuthService) : IInboxService
+    ICookieAuthService cookieAuthService,
+    IPaginationService paginationService) : IInboxService
 {
-    public async Task<Result> GetInboxAsync(string sessionId, int page, int pageSize, bool refresh)
+    public async Task<Result> GetInboxAsync(string sessionId, int page, int perPage, bool refresh)
     {
-        var cacheKey = CacheConfig.GetInboxCacheKey(sessionId);
-        if (!refresh)
+        //var key = CacheConfig.GetInboxCacheKey(sessionId);
+
+        var loginResult = cookieAuthService.GetLoginCookie();
+        if (!loginResult.IsSuccess) return Result.Failure(loginResult.Error!);
+
+        var login = loginResult.GetData<LoginCookie>();
+        var client = clientFactory.Create(login.ImapServer, login.ImapPort, login.ImapUsername, login.ImapPassword);
+
+        var connected = await client.ConnectAndLoginAsync();
+        if (!connected.IsSuccess) return Result.Failure(connected.Error!);
+
+        var fetchResult = await client.GetInboxAsync(page, perPage);
+        if (!fetchResult.IsSuccess) return Result.Failure(fetchResult.Error!);
+
+        var inboxVm = fetchResult.GetData<InboxViewModel>();
+
+        //cache.Set(key, inboxVm.Emails, CacheConfig.InboxTtl);
+
+        //var paged = paginationService.Paginate(inboxVm.Emails!, page, perPage);
+        return Result.Success(new InboxViewModel
         {
-            if (cache.TryGet(cacheKey, out InboxViewModel cached))
-            {
-                return Result.Success(cached);
-            }
-        }
-
-        var loginCookieResult = cookieAuthService.GetLoginCookie();
-        if (!loginCookieResult.IsSuccess) return loginCookieResult;
-
-        var login = loginCookieResult.GetData<LoginCookie>();
-        var client = clientFactory.Create(login.ImapServer,
-                                          login.ImapPort,
-                                          login.ImapUsername,
-                                          login.ImapPassword);
-
-        var connect = await client.ConnectAsync();
-        if (!connect.IsSuccess) return connect;
-
-        var loginResult = await client.LoginAsync();
-        if (!loginResult.IsSuccess) return loginResult;
-
-        var headersResult = await client.GetInboxAsync(page, pageSize);
-        if (!headersResult.IsSuccess) return headersResult;
-
-        var inboxVm = headersResult.GetData<InboxViewModel>();
-        inboxVm.Emails!.FormatAndTrimEmailData();
-
-        cache.Set(cacheKey, inboxVm, CacheConfig.InboxTtl);
-
-        return Result.Success(inboxVm);
+            Emails = paged,
+            CurrentPage = page,
+            TotalPages = inboxVm.TotalPages
+        });
     }
+
 }

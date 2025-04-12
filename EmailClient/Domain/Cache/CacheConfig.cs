@@ -9,4 +9,6 @@ public static class CacheConfig
     public static string GetInboxCacheKey(string sessionId) => $"inbox:{sessionId}";
 
     public static readonly TimeSpan InboxTtl = TimeSpan.FromSeconds(60);
+
+    public static readonly int MaxEmailsInCache = 40;
 }

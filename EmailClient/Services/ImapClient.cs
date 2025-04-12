@@ -2,6 +2,7 @@
 
 using EmailClient.Domain.Errors;
 using EmailClient.Domain.Results;
+using EmailClient.Helpers;
 using EmailClient.Services.Contracts;
 using EmailClient.ViewModels.Email;
 using System;
@@ -62,6 +63,16 @@ public class ImapClient(string host, int port, string username, string password)
             ? Result.Success()
             : Result.Failure(ImapErrors.ImapLoginFailed(taggedResponse));
     }
+    public async Task<Result> ConnectAndLoginAsync()
+    {
+        var connect = await ConnectAsync();
+        if (!connect.IsSuccess) return connect;
+
+        var login = await LoginAsync();
+        if (!login.IsSuccess) return login;
+
+        return Result.Success();
+    }
 
     public async Task<Result> LogoutAsync()
     {
@@ -111,7 +122,7 @@ public class ImapClient(string host, int port, string username, string password)
 
         var inboxVm = new InboxViewModel
         {
-            Emails = emails,
+            Emails = emails.FormatAndTrimEmailData(),
             CurrentPage = page,
             TotalPages = totalPages
         };

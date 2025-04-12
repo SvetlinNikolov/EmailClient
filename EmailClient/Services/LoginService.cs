@@ -19,11 +19,8 @@ public class LoginService(
             loginViewModel.ImapLogin.ImapPassword
         );
 
-        var connect = await client.ConnectAsync();
-        if (!connect.IsSuccess) return connect;
-
-        var login = await client.LoginAsync();
-        if (!login.IsSuccess) return login;
+        var connectAndLogin = await client.ConnectAndLoginAsync();
+        if (!connectAndLogin.IsSuccess) return connectAndLogin;
 
         var cookie = MapLoginVmToLoginCookie(loginViewModel);
 

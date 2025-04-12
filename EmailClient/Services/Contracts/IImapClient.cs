@@ -6,6 +6,7 @@ public interface IImapClient : IDisposable
 {
     Task<Result> ConnectAsync();
     Task<Result> LoginAsync();
+    Task<Result> ConnectAndLoginAsync();
     Task<Result> LogoutAsync();
-    Task<Result> GetInboxAsync(int page = 1, int pageSize = 10);
+    Task<Result> GetInboxAsync(int page, int pageSize);
 }

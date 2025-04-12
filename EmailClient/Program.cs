@@ -29,6 +29,7 @@ namespace EmailClient
             builder.Services.AddSingleton<ICookieAuthService, CookieAuthService>();
             builder.Services.AddSingleton<IInboxService, InboxService>();
             builder.Services.AddSingleton<ILoginService, LoginService>();
+            builder.Services.AddSingleton<IPaginationService, PaginationService>();
 
             var app = builder.Build();
             app.Urls.Add("http://+:8080");
