@@ -6,4 +6,5 @@ using EmailClient.ViewModels.Login;
 public interface ILoginService
 {
     Task<Result> LoginAsync(LoginViewModel loginViewModel);
+    Result Logout();
 }

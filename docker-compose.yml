@@ -5,7 +5,7 @@ services:
     image: abritestask:dev
     build:
       context: .
-      dockerfile: AbritesTask/Dockerfile
+      dockerfile: EmailClient/Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"

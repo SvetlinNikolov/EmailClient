@@ -1,12 +1,14 @@
 ﻿namespace EmailClient.Controllers;
+
+using EmailClient.Domain.Results;
 using EmailClient.Services.Contracts;
 using EmailClient.ViewModels.Login;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("/Login")]
-public class LoginController(ILoginService loginService) : Controller
+[Route("[controller]")]
+public class AuthController(ILoginService loginService) : Controller
 {
-    [HttpPost]
+    [HttpPost("Login")]
     public async Task<IActionResult> Login(LoginViewModel loginViewModel)
     {
         var loginResult = await loginService.LoginAsync(loginViewModel);
@@ -21,9 +23,16 @@ public class LoginController(ILoginService loginService) : Controller
         return RedirectToAction("Inbox", "Email");
     }
 
-    [HttpGet]
+    [HttpGet("Login")]
     public IActionResult Login()
     {
         return View(new LoginViewModel());
+    }
+
+    [HttpPost("Logout")]
+    public IActionResult Logout()
+    {
+        var logout = loginService.Logout();
+        return RedirectToAction("Login");
     }
 }

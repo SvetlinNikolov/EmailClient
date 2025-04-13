@@ -35,6 +35,20 @@ public class LoginService(
         return Result.Success();
     }
 
+    public Result Logout()
+    {
+        try
+        {
+            cookieAuthService.ClearLoginCookie();
+            return Result.Success();
+        }
+        catch 
+        {
+            // log
+            return Result.Failure(CookieErrors.CookieDeserializationFailed());
+        }
+    }
+
     private static LoginCookie MapLoginVmToLoginCookie(LoginViewModel loginViewModel)
     {
         return new LoginCookie
@@ -50,4 +64,6 @@ public class LoginService(
             SmtpPassword = loginViewModel.SmtpLogin.SmtpPassword
         };
     }
+
+
 }

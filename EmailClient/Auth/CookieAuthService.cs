@@ -27,7 +27,7 @@ public class CookieAuthService : ICookieAuthService
             _httpContextAccessor.HttpContext!.Response.Cookies.Append(GetCookieKey(), protectedData, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, //false for dev purposes
+                Secure = true, 
                 Expires = DateTimeOffset.UtcNow.Add(CookieConstants.AuthCookieTtl),
                 SameSite = SameSiteMode.Strict
             });
