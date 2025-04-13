@@ -45,15 +45,19 @@
                         body: JSON.stringify(data)
                     });
 
+                    const result = await res.json();
+
                     if (!res.ok) {
-                        const error = await res.text();
-                        throw new Error(error);
+                        throw new Error(result.message || "Unknown error");
                     }
 
                     status.textContent = 'Email sent successfully.';
+                    status.style.color = 'green';
                     form.reset();
+
                 } catch (err) {
-                    status.textContent = 'Error: ' + err.message;
+                    status.textContent = err.message;
+                    status.style.color = 'red';
                 }
             });
         } else {

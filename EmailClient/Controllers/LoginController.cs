@@ -14,6 +14,7 @@ public class LoginController(ILoginService loginService) : Controller
         if (!loginResult.IsSuccess)
         {
             loginViewModel.ErrorMessage = loginResult.Error?.Message;
+            loginViewModel.ErrorCode = loginResult.Error?.Code;
             return View(loginViewModel);
         }
 

@@ -1,6 +1,7 @@
 ﻿namespace EmailClient.Services;
 
 using EmailClient.Auth;
+using EmailClient.Domain.Errors;
 using EmailClient.Domain.Results;
 using EmailClient.Services.Contracts;
 using EmailClient.ViewModels.Login;
@@ -12,6 +13,12 @@ public class LoginService(
 {
     public async Task<Result> LoginAsync(LoginViewModel loginViewModel)
     {
+        var isLoggedInResult = cookieAuthService.IsLoggedIn();
+        if (isLoggedInResult.IsSuccess)
+        {
+            return Result.Failure(CookieErrors.AlreadyLoggedIn());
+        }
+
         var cookieResult = cookieAuthService.SaveLoginCookie(MapLoginVmToLoginCookie(loginViewModel));
         if (!cookieResult.IsSuccess)
         {

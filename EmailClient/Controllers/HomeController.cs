@@ -2,7 +2,6 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-[Route("/")]
 public class HomeController : Controller
 {
     [HttpGet]

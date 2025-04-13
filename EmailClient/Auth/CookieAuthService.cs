@@ -42,11 +42,11 @@ public class CookieAuthService : ICookieAuthService
 
     public Result GetLoginCookie()
     {
-        if (!_httpContextAccessor.HttpContext!.Request.Cookies.TryGetValue(GetCookieKey(), out var raw))
-            return Result.Failure(CookieErrors.CookieNotFound());
-
         try
         {
+            if (!_httpContextAccessor.HttpContext!.Request.Cookies.TryGetValue(GetCookieKey(), out var raw))
+                return Result.Failure(CookieErrors.CookieNotFound());
+
             var json = _protector.Unprotect(raw);
             var payload = JsonSerializer.Deserialize<LoginCookie>(json);
 
@@ -63,6 +63,14 @@ public class CookieAuthService : ICookieAuthService
     public void ClearLoginCookie()
     {
         _httpContextAccessor.HttpContext?.Response.Cookies.Delete(GetCookieKey());
+    }
+
+    public Result IsLoggedIn()
+    {
+        var result = GetLoginCookie();
+        return result.IsSuccess
+            ? Result.Success()
+            : Result.Failure(result.Error!); 
     }
 
     private string GetCookieKey() =>

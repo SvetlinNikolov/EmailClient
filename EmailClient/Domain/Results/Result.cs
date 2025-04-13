@@ -1,4 +1,5 @@
 ﻿using EmailClient.Domain.Errors;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmailClient.Domain.Results;
 

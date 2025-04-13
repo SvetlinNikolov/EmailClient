@@ -1,5 +1,6 @@
 ﻿namespace EmailClient.Controllers;
 
+using EmailClient.Domain.Results;
 using EmailClient.Services.Contracts;
 using EmailClient.ViewModels.Email;
 using EmailClient.ViewModels.Email.Requests;
@@ -14,7 +15,7 @@ public class EmailController(IInboxService inboxService, IEmailSenderService ema
         var inboxResult = await inboxService.GetInboxAsync(HttpContext.Session.Id, page, 10, refresh); // this in constant TODO
         if (!inboxResult.IsSuccess)
         {
-            return View("Error", inboxResult.Error!.Message);
+            return inboxResult.BuildResult();
         }
 
         var inboxVm = inboxResult.GetData<InboxViewModel>();
@@ -25,7 +26,6 @@ public class EmailController(IInboxService inboxService, IEmailSenderService ema
     public async Task<IActionResult> SendEmail([FromBody] SendEmailRequest sendEmailRequest)
     {
         var emailSendResult = await emailSenderService.SendEmailAsync(sendEmailRequest);
-
-        return View("Inbox"); //TODO return succesfully sent or error
+        return emailSendResult.BuildResult();
     }
 }

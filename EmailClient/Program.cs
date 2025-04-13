@@ -34,7 +34,11 @@ namespace EmailClient
             builder.Services.AddSingleton<IIMapSessionService, IMapSessionService>();
             
             var app = builder.Build();
-            app.Urls.Add("http://+:8080");
+            app.UseHttpsRedirection();
+            if (!app.Environment.IsDevelopment())
+            {
+                app.Urls.Add("http://+:8080");
+            }
 
             app.UseStaticFiles();
             app.UseSession();

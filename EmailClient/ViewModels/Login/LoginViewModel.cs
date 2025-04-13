@@ -7,4 +7,6 @@ public class LoginViewModel
     public SmtpLoginViewModel SmtpLogin { get; set; } = new();
 
     public string? ErrorMessage { get; set; }
+
+    public string? ErrorCode { get; set; }
 }
