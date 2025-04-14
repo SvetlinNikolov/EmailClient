@@ -1,4 +1,4 @@
-﻿@using EmailClient.ViewModels.Login
+﻿@using EmailClient.ViewModels.ViewModels.Login
 @model LoginViewModel
 
 @{
@@ -15,7 +15,7 @@
             <legend>Incoming Mail (IMAP)</legend>
 
             <label>Server</label>
-            <input asp-for="ImapLogin.ImapServer" name="ImapLogin.ImapServer" value="imap.gmail.com" required />
+            <input asp-for="ImapLogin.ImapServer" name="ImapLogin.ImapServer" required />
 
             <label>Port</label>
             <input asp-for="ImapLogin.ImapPort" name="ImapLogin.ImapPort" type="number" value="993" required />

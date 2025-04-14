@@ -1,10 +1,10 @@
 ﻿namespace EmailClient.Controllers;
 
-using EmailClient.Domain.Results;
-using EmailClient.Services.Contracts;
-using EmailClient.ViewModels.Email;
-using EmailClient.ViewModels.Email.Requests;
+using EmailClient.Services.Services.Contracts;
+using EmailClient.ViewModels.ViewModels.Email;
+using EmailClient.ViewModels.ViewModels.Email.Requests;
 using Microsoft.AspNetCore.Mvc;
+using EmailService.Domain.Results;
 
 [Route("/Email")]
 public class EmailController(IInboxService inboxService, IEmailSenderService emailSenderService) : Controller

@@ -1,8 +1,8 @@
-﻿using EmailClient.Factories.Contracts;
-using EmailClient.Factories;
-using EmailClient.Services.Contracts;
-using EmailClient.Services;
-using EmailClient.Auth;
+﻿using EmailClient.Services.Factories.Contracts;
+using EmailClient.Services.Factories;
+using EmailClient.Services.Auth;
+using EmailClient.Services.Services.Contracts;
+using EmailClient.Services.Services;
 
 namespace EmailClient
 {

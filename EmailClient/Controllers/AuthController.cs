@@ -1,8 +1,7 @@
 ﻿namespace EmailClient.Controllers;
 
-using EmailClient.Domain.Results;
-using EmailClient.Services.Contracts;
-using EmailClient.ViewModels.Login;
+using EmailClient.Services.Services.Contracts;
+using EmailClient.ViewModels.ViewModels.Login;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("[controller]")]
