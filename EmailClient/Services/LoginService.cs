@@ -40,9 +40,12 @@ public class LoginService(
         try
         {
             cookieAuthService.ClearLoginCookie();
+            var sessionId = httpContextAccessor.HttpContext!.Session.Id;
+            imapSessionService.EndSession(sessionId);
+
             return Result.Success();
         }
-        catch 
+        catch
         {
             // log
             return Result.Failure(CookieErrors.CookieDeserializationFailed());

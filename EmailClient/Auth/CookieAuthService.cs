@@ -27,7 +27,7 @@ public class CookieAuthService : ICookieAuthService
             _httpContextAccessor.HttpContext!.Response.Cookies.Append(GetCookieKey(), protectedData, new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true, 
+                Secure = true,
                 Expires = DateTimeOffset.UtcNow.Add(CookieConstants.AuthCookieTtl),
                 SameSite = SameSiteMode.Strict
             });
@@ -36,7 +36,7 @@ public class CookieAuthService : ICookieAuthService
         }
         catch
         {
-            return Result.Failure(CookieErrors.CookieDeserializationFailed());
+            return Result.Failure(ImapErrors.ImapLogoutFailed());
         }
     }
 
@@ -70,7 +70,7 @@ public class CookieAuthService : ICookieAuthService
         var result = GetLoginCookie();
         return result.IsSuccess
             ? Result.Success()
-            : Result.Failure(result.Error!); 
+            : Result.Failure(result.Error!);
     }
 
     private string GetCookieKey() =>
