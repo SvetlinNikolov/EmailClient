@@ -45,9 +45,8 @@
                         body: JSON.stringify(data)
                     });
 
-                    const result = await res.json();
-
                     if (!res.ok) {
+                        const result = await res.json();
                         throw new Error(result.message || "Unknown error");
                     }
 

@@ -75,7 +75,7 @@ public class SmtpClient(string smtpServer, int port, string username, string pas
             () => Step($"RCPT TO:<{to}>"),
             () => Step("DATA"),
             () => Step(FormatEmail(subject, body)),
-            () => Step("QUIT")
+            () => Step("QUIT", read: false)
         );
     }
 
